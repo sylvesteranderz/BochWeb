@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { PRODUCTS } from '../data/products';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const ProductDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
+    const [isAdded, setIsAdded] = useState(false);
 
     const product = PRODUCTS.find(p => p.id === Number(id));
+
+    const handleAddToCart = () => {
+        if (product) {
+            addToCart(product);
+            setIsAdded(true);
+            setTimeout(() => setIsAdded(false), 2000);
+        }
+    };
 
     if (!product) {
         return (
@@ -71,8 +82,14 @@ const ProductDetails: React.FC = () => {
                                 Sold Out
                             </button>
                         ) : (
-                            <button className="w-full bg-black text-white py-4 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors">
-                                Add to Cart
+                            <button
+                                onClick={handleAddToCart}
+                                className={`w-full py-4 font-bold uppercase tracking-widest transition-all duration-300 ${isAdded
+                                        ? 'bg-green-600 text-white'
+                                        : 'bg-black text-white hover:bg-gray-800'
+                                    }`}
+                            >
+                                {isAdded ? '✓ Added to Cart' : 'Add to Cart'}
                             </button>
                         )}
                     </div>

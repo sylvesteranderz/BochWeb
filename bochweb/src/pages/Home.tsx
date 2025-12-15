@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import { PRODUCTS } from '../data/products';
 
 const Home: React.FC = () => {
-    const [cartCount, setCartCount] = useState(0);
+    const { cartCount } = useCart();
     const navigate = useNavigate();
 
     const handleProductClick = (id: number) => {
         navigate(`/product/${id}`);
+    };
+
+    const handleCartClick = () => {
+        navigate('/cart');
     };
 
     return (
@@ -20,7 +25,10 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Cart */}
-                <div className="flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity">
+                <div
+                    onClick={handleCartClick}
+                    className="flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity"
+                >
                     <span>Cart</span>
                     <div className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         {cartCount}
@@ -30,7 +38,7 @@ const Home: React.FC = () => {
 
             {/* Product Grid */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 lg:gap-24">
                     {PRODUCTS.map((product) => (
                         <div
                             key={product.id}

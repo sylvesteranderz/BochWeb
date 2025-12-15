@@ -10,50 +10,50 @@ export interface Product {
 export const PRODUCTS: Product[] = [
     {
         id: 1,
-        name: "Silver Rosary I",
+        name: "Product1",
         price: 150,
-        image: "/Images/product-rosary.png",
+        image: "/public/Images/Product1.jpg",
         soldOut: true,
         description: "Handcrafted silver rosary with intricate detailing. A timeless piece for your collection."
     },
     {
         id: 2,
-        name: "Silver Rosary II",
+        name: "Product2",
         price: 150,
-        image: "/Images/product-rosary.png",
+        image: "/public/Images/Product2.jpg",
         soldOut: false,
         description: "Elegant silver rosary featuring a unique cross design. Perfect for daily wear."
     },
     {
         id: 3,
-        name: "Black Rosary",
+        name: "Product3",
         price: 150,
-        image: "/Images/product-rosary.png",
+        image: "/public/Images/Product3.jpg",
         soldOut: true,
         description: "Matte black finish rosary. Bold, understated, and spiritual."
     },
     {
         id: 4,
-        name: "Gold Plated Rosary",
+        name: "Product4",
         price: 180,
-        image: "/Images/product-rosary.png",
+        image: "/public/Images/Product4.jpg",
         soldOut: false,
         description: "Premium gold plated rosary. A symbol of faith and luxury."
     },
     {
         id: 5,
-        name: "Pearl Rosary",
+        name: "Product5",
         price: 200,
-        image: "/Images/product-rosary.png",
+        image: "/public/Images/Product5.jpg",
         soldOut: false,
         description: "Genuine freshwater pearls strung with silver accents."
     },
     {
         id: 6,
-        name: "Obsidian Rosary",
+        name: "Product6",
         price: 160,
-        image: "/Images/product-rosary.png",
+        image: "public/Images/Product1.jpg",
         soldOut: false,
         description: "Natural obsidian beads providing a sleek, dark aesthetic."
-    }
+    }   
 ];
