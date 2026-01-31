@@ -13,15 +13,16 @@ const Home: React.FC = () => {
     return (
         <div className="min-h-screen bg-white text-black font-sans">
             {/* Header */}
-            <header className="flex flex-col items-center py-8 gap-4 sticky top-0 bg-white/90 backdrop-blur-sm z-50">
+            <header className="relative flex justify-center items-center h-24 sticky top-0 bg-white/90 backdrop-blur-sm z-50 ">
                 {/* Logo Area */}
-                <div className="text-4xl font-bold tracking-tighter uppercase border-b-2 border-black pb-1">
-                    BOCH
+                <div id="logo" className="top-2 mt-23  ">
+                    <img src="/Images/Ascension.png" alt="Logo" className="h-110 w-auto max-w-none " />
                 </div>
 
                 {/* Cart */}
-                <div className="flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity">
+                <div className="absolute right-8 flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity z-50">
                     <span>Cart</span>
+                    
                     <div className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                         {cartCount}
                     </div>
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
 
             {/* Product Grid */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12 lg:gap-24">
                     {PRODUCTS.map((product) => (
                         <div
                             key={product.id}
@@ -45,7 +46,7 @@ const Home: React.FC = () => {
                                     </div>
                                 )}
                                 <img
-                                    src={product.image}
+                                    src={product.images[0]}
                                     alt={product.name}
                                     className={`w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 ${product.soldOut ? 'opacity-50' : ''}`}
                                 />
@@ -57,7 +58,7 @@ const Home: React.FC = () => {
                             </div>
 
                             {/* Minimal Info Below */}
-                            <div className="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="text-center mt-4">
                                 <h3 className="text-sm font-bold uppercase tracking-wide">{product.name}</h3>
                                 <p className="text-sm text-gray-500">${product.price}</p>
                             </div>
