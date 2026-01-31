@@ -6,8 +6,31 @@ import { FaArrowLeft } from 'react-icons/fa';
 const ProductDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const [activeImageIndex, setActiveImageIndex] = React.useState(0);
+    const [cartCount] = React.useState(0);
+    const scrollRef = React.useRef<HTMLDivElement>(null);
 
     const product = PRODUCTS.find(p => p.id === Number(id));
+
+    const scrollToImage = (index: number) => {
+        setActiveImageIndex(index);
+        if (scrollRef.current) {
+            const width = scrollRef.current.offsetWidth;
+            scrollRef.current.scrollTo({
+                left: index * width,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    const handleScroll = () => {
+        if (scrollRef.current) {
+            const width = scrollRef.current.offsetWidth;
+            const scrollLeft = scrollRef.current.scrollLeft;
+            const index = Math.round(scrollLeft / width);
+            setActiveImageIndex(index);
+        }
+    };
 
     if (!product) {
         return (
@@ -26,27 +49,65 @@ const ProductDetails: React.FC = () => {
     return (
         <div className="min-h-screen bg-white text-black font-sans">
             {/* Header */}
-            <header className="flex items-center justify-between px-8 py-8">
-                <button
-                    onClick={() => navigate('/home')}
-                    className="text-xl hover:opacity-70 transition-opacity"
-                >
-                    <FaArrowLeft />
-                </button>
-                <div className="text-2xl font-bold tracking-tighter uppercase">
-                    BOCH
+            <header className="relative flex justify-center items-center h-24 sticky top-0 bg-white/90 backdrop-blur-sm z-50 ">
+                {/* Logo Area */}
+                <div id="logo" className="top-2 mt-23  ">
+                    <img src="/Images/Ascension.png" alt="Logo" className="h-110 w-auto max-w-none " />
                 </div>
-                <div className="w-6"></div> {/* Spacer for centering */}
+
+                {/* Cart */}
+                <div className="absolute right-8 flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity z-50">
+                    <span>Cart</span>
+                    <div className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {cartCount}
+                    </div>
+                </div>
             </header>
 
-            <main className="max-w-6xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-12 items-center md:items-start">
+            <main className="max-w-6xl mx-auto px-4 py-12 flex flex-col md:flex-row gap-12 items-start">
                 {/* Image Section */}
-                <div className="w-full md:w-1/2 flex justify-center bg-gray-50 p-8 rounded-lg">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full max-w-md object-contain drop-shadow-xl"
-                    />
+                <div className="w-full md:w-1/2 flex flex-col gap-6">
+                    {/* Main Image Stage */}
+                    <div
+                        ref={scrollRef}
+                        className="w-full aspect-square bg-gray-50 rounded-xl overflow-x-auto snap-x snap-mandatory flex scrollbar-hide"
+                        onScroll={handleScroll}
+                    >
+                        {product.images.map((img, index) => (
+                            <div
+                                key={index}
+                                className="min-w-full h-full snap-center flex items-center justify-center p-8"
+                            >
+                                <img
+                                    src={img}
+                                    alt={`${product.name} - View ${index + 1}`}
+                                    className="w-full h-full object-contain drop-shadow-xl"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Thumbnail Navigation */}
+                    {product.images.length > 1 && (
+                        <div className="flex justify-center gap-2 mt-4 overflow-x-auto scrollbar-hide py-2">
+                            {product.images.map((img, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => scrollToImage(index)}
+                                    className={`relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border-2 transition-all ${activeImageIndex === index
+                                        ? 'border-black opacity-100'
+                                        : 'border-transparent opacity-50 hover:opacity-100'
+                                        }`}
+                                >
+                                    <img
+                                        src={img}
+                                        alt={`Go to slide ${index + 1}`}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Details Section */}
