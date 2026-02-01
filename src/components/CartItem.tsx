@@ -28,7 +28,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove })
             {/* Product Image */}
             <div className="w-24 h-24 flex-shrink-0 bg-gray-50 rounded-md overflow-hidden">
                 <img
-                    src={item.image}
+                    src={item.images[0]}
                     alt={item.name}
                     className="w-full h-full object-contain"
                 />
