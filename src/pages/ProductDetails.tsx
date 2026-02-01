@@ -7,10 +7,10 @@ import { FaArrowLeft } from 'react-icons/fa';
 const ProductDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-<<<<<<< HEAD:bochweb/src/pages/ProductDetails.tsx
+    const { addToCart, cartCount } = useCart();
     const [activeImageIndex, setActiveImageIndex] = React.useState(0);
-    const [cartCount] = React.useState(0);
     const scrollRef = React.useRef<HTMLDivElement>(null);
+    const [isAdded, setIsAdded] = useState(false);
 
     const product = PRODUCTS.find(p => p.id === Number(id));
 
@@ -31,18 +31,14 @@ const ProductDetails: React.FC = () => {
             const scrollLeft = scrollRef.current.scrollLeft;
             const index = Math.round(scrollLeft / width);
             setActiveImageIndex(index);
-=======
-    const { addToCart } = useCart();
-    const [isAdded, setIsAdded] = useState(false);
-
-    const product = PRODUCTS.find(p => p.id === Number(id));
+        }
+    };
 
     const handleAddToCart = () => {
         if (product) {
             addToCart(product);
             setIsAdded(true);
             setTimeout(() => setIsAdded(false), 2000);
->>>>>>> 3babc695205c14e97f5b79a91fb03118ff39e5f7:src/pages/ProductDetails.tsx
         }
     };
 
@@ -149,8 +145,8 @@ const ProductDetails: React.FC = () => {
                             <button
                                 onClick={handleAddToCart}
                                 className={`w-full py-4 font-bold uppercase tracking-widest transition-all duration-300 ${isAdded
-                                        ? 'bg-green-600 text-white'
-                                        : 'bg-black text-white hover:bg-gray-800'
+                                    ? 'bg-green-600 text-white'
+                                    : 'bg-black text-white hover:bg-gray-800'
                                     }`}
                             >
                                 {isAdded ? '✓ Added to Cart' : 'Add to Cart'}
