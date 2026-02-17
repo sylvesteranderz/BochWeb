@@ -12,7 +12,7 @@ const SplashPage: React.FC = () => {
     return (
         <div
             className="w-screen h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center relative"
-            style={{ backgroundImage: "url('/Images/Splash1.jpg')" }}
+            style={{ backgroundImage: "url('/Images/Background2.jpeg')" }}
         >
             <div className="flex flex-col items-center gap-5 z-10">
                 <button
