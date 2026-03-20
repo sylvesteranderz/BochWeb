@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
 import CartItem from '../components/CartItem';
-import { FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
+import { FaShoppingBag } from 'react-icons/fa';
+import Header from '../components/Header';
 
 const Cart: React.FC = () => {
     const navigate = useNavigate();
@@ -26,22 +27,7 @@ const Cart: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 text-black font-sans">
-            {/* Header */}
-            <header className="bg-white shadow-sm sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
-                    <button
-                        onClick={() => navigate('/home')}
-                        className="flex items-center gap-2 text-lg hover:opacity-70 transition-opacity"
-                    >
-                        <FaArrowLeft />
-                        <span className="hidden sm:inline">Continue Shopping</span>
-                    </button>
-                    <div className="text-2xl font-bold tracking-tighter uppercase">
-                        BOCH
-                    </div>
-                    <div className="w-24"></div> {/* Spacer for centering */}
-                </div>
-            </header>
+            <Header />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <h1 className="text-3xl font-bold mb-8 uppercase tracking-wide flex items-center gap-3">

@@ -1,45 +1,37 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useProducts } from '../hooks/useProducts';
 import { useCart } from '../hooks/useCart';
-import { useProducts, getOptimizedImageUrl } from '../hooks/useProducts';
+import Header from '../components/Header';
+import AddedToCartModal from '../components/AddedToCartModal';
+import ProductCard from '../components/ProductCard';
 
 const Home: React.FC = () => {
-    const { cartCount, isLoading: isCartLoading } = useCart();
     const { data: products, isLoading: isProductsLoading, isError } = useProducts();
-    const navigate = useNavigate();
+    const { addToCart } = useCart();
 
-    const handleProductClick = (id: string) => {
-        navigate(`/product/${encodeURIComponent(id)}`);
-    };
+    // State for Quick Add Confirmation Modal
+    const [showCartModal, setShowCartModal] = useState(false);
+    const [addedProduct, setAddedProduct] = useState<any>(null);
 
-    const handleCartClick = () => {
-        navigate('/cart');
+    const handleQuickAdd = (e: React.MouseEvent, product: any) => {
+        // Stop the Link click event from firing context navigation
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (product && product.variants && product.variants.length > 0) {
+            const selectedVariant = product.variants[0];
+            addToCart(selectedVariant, 1);
+            setAddedProduct(product);
+            setShowCartModal(true);
+        }
     };
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans">
-            {/* Header */}
-            <header className="relative flex justify-center items-center h-24 sticky top-0 bg-white/90 backdrop-blur-sm z-50 ">
-                {/* Logo Area */}
-                <div id="logo" className="top-2 mt-23  ">
-                    <img src="/Images/Ascension.png" alt="Logo" className="h-110 w-auto max-w-none " />
-                </div>
+        <div className="min-h-screen bg-white text-black font-sans relative">
+            <Header />
 
-                {/* Cart */}
-                <div
-                    onClick={handleCartClick}
-                    className="absolute right-8 flex items-center gap-2 text-sm font-medium cursor-pointer hover:opacity-70 transition-opacity z-50"
-                >
-                    <span>Cart</span>
-
-                    <div className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {isCartLoading ? '...' : cartCount}
-                    </div>
-                </div>
-            </header>
-
-            {/* Product Grid */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            {/* Product Grid - Full Bleed Portrait Style */}
+            <main className="max-w-[1800px] w-full mx-auto px-1 sm:px-2 pb-12 pt-4">
                 {isProductsLoading ? (
                     <div className="flex justify-center items-center py-24">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
@@ -53,51 +45,27 @@ const Home: React.FC = () => {
                         No products found.
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12 lg:gap-24">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-2">
                         {products?.map((product) => {
-                            const isSoldOut = !product.availableForSale;
-                            const mainImage = product.images?.[0]?.src || '';
-                            const optimizedImage = getOptimizedImageUrl(mainImage, 600);
-                            const price = product.variants?.[0]?.priceV2?.amount || '0.00';
-                            
                             return (
-                                <div
+                                <ProductCard 
                                     key={product.id}
-                                    className="group relative flex flex-col items-center cursor-pointer"
-                                    onClick={() => handleProductClick(product.id)}
-                                >
-                                    {/* Image Container */}
-                                    <div className="relative w-full aspect-square flex items-center justify-center mb-6">
-                                        {isSoldOut && (
-                                            <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-2 py-1 uppercase tracking-wider z-10">
-                                                Sold Out
-                                            </div>
-                                        )}
-                                        {optimizedImage && (
-                                            <img
-                                                src={optimizedImage}
-                                                alt={product.title}
-                                                className={`w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 ${isSoldOut ? 'opacity-50' : ''}`}
-                                            />
-                                        )}
-
-                                        {/* Hover Overlay Text */}
-                                        <div className="absolute bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center bg-white/80 px-4 py-2 rounded-full shadow-sm">
-                                            <span className="text-sm font-bold uppercase tracking-wider">View Details</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Minimal Info Below */}
-                                    <div className="text-center mt-4">
-                                        <h3 className="text-sm font-bold uppercase tracking-wide">{product.title}</h3>
-                                        <p className="text-sm text-gray-500">${price}</p>
-                                    </div>
-                                </div>
+                                    product={product}
+                                    onQuickAdd={(p: any) => handleQuickAdd({ preventDefault: () => {}, stopPropagation: () => {} } as any, p)}
+                                />
                             );
                         })}
                     </div>
                 )}
             </main>
+
+            {/* Global Success Modal triggered by Quick Add */}
+            <AddedToCartModal 
+                isOpen={showCartModal}
+                onClose={() => setShowCartModal(false)}
+                itemTitle={addedProduct?.title || ''}
+                variant={addedProduct?.variants?.[0] || null}
+            />
         </div>
     );
 };
